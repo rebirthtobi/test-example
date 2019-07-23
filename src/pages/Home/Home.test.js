@@ -14,7 +14,7 @@ describe('Testing the homepage', () => {
         expect(getByTestId('loader')).toHaveTextContent('Loading...');
     });
 
-    it('renders fetches the products well enough', async () => {
+    it.skip('renders fetches the products well enough', async () => {
         const fetchURL = 'http://localhost:3001/products?_page=1&_limit=18';
         fetchMock.get(fetchURL, {
             data: [

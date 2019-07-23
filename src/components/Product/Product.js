@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import FaceMenu from './components/FaceMenu/FaceMenu';
 import { convertToCurrency } from '../../library/price';
 
 const Container = styled.div`
@@ -11,13 +12,13 @@ const Container = styled.div`
     border: 1px solid ${props => props.theme.greyColor};
 `;
 
-const Face = styled.p`
+const Face = styled.div`
     text-align: center;
     font-weight: bold;
     font-size: 24px;
-    margin-top: 22px;
-    margin-bottom: 22px;
-    cursor: pointer;
+    padding-top: 22px;
+    padding-bottom: 22px;
+    position: relative;
 `;
 
 const Details = styled.div`
@@ -49,8 +50,9 @@ const DetailsValue = styled.span`
 
 const Product = ({ id, face, price, size, onClick }) => (
     <Container>
-        <Face onClick={() => onClick(id)}>
+        <Face>
             {face}
+            <FaceMenu faceId={id} />
         </Face>
         <Details>
             <DetailsItem>

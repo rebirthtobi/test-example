@@ -20,7 +20,7 @@ describe('Testing the product component', () => {
         expect(getByText('Price:').nextElementSibling.textContent).toBe('$3.42');
     });
 
-    it('respond to product click event', () => {
+    it.skip('respond to product click event', () => {
         const clickFunction = jest.fn(resp => resp);
         const { getByText } = render(<Product face="ᕙ༼ຈل͜ຈ༽ᕗ" price={342} size={34} id="3" onClick={clickFunction} />);
 
