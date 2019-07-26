@@ -48,7 +48,7 @@ const DetailsValue = styled.span`
     align-self: flex-end;
 `;
 
-const Product = ({ id, face, price, size, onClick }) => (
+const Product = ({ id, face, price, size }) => (
     <Container>
         <Face>
             {face}
@@ -80,7 +80,6 @@ Product.propTypes = {
     face: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     size: PropTypes.number.isRequired,
-    onClick: PropTypes.func.isRequired,
 };
 
 export default Product;

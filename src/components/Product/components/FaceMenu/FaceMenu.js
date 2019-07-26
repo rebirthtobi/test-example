@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from "react-redux";
+import { addProductToCart } from "../../../../reducers/cartReducer";
 
 const Container = styled.div`
     position: absolute;
@@ -40,7 +42,7 @@ const Icon = styled.span`
     cursor: pointer;
 `;
 
-export default class FaceMenu extends Component {
+class FaceMenu extends Component {
     constructor(props) {
         super(props);
 
@@ -51,7 +53,8 @@ export default class FaceMenu extends Component {
     }
 
     static propTypes = {
-        faceId: PropTypes.string.isRequired
+        faceId: PropTypes.string.isRequired,
+        addProductToCart: PropTypes.func.isRequired
     };
 
     componentDidMount() {
@@ -62,7 +65,12 @@ export default class FaceMenu extends Component {
         document.removeEventListener('mousedown', this.closeMenuModal, false);
     }
 
-    addToCart = () => {};
+    addToCart = () => {
+        const { addProductToCart, faceId } = this.props;
+        addProductToCart(faceId);
+        this.toggleMenuOptions();
+        // TODO: send notification that product is added to cart
+    };
 
     shareProduct = () => {};
 
@@ -81,7 +89,7 @@ export default class FaceMenu extends Component {
         if (isMenuOpen) {
             return (
                 <MenuHolder ref={this.menuRef}>
-                    <MenuItem onClick={this.addToCart}>Add to Cart</MenuItem>
+                    <MenuItem onClick={this.addToCart} data-testid={'addToCart'}>Add to Cart</MenuItem>
                     <MenuItem onClick={this.shareProduct}>Share Product</MenuItem>
                     <MenuItem onClick={this.shareFace}>Share Face</MenuItem>
                 </MenuHolder>
@@ -102,3 +110,12 @@ export default class FaceMenu extends Component {
         )
     }
 }
+
+const mapDispatchToProps = {
+    addProductToCart
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(FaceMenu);

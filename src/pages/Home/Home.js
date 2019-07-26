@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import Product from '../../components/Product/Product';
-import request from '../../library/api';
-import { PRODUCT_URL, PRODUCT_LIMIT } from '../../library/constant';
+import { getProducts } from "../../reducers/productReducer";
 
 const Container = styled.div`
     width: 80%
@@ -15,7 +16,7 @@ const Container = styled.div`
     padding-bottom: 8px;
 `;
 
-export default class Home extends Component {
+class Home extends Component {
     constructor(props) {
         super(props);
 
@@ -27,33 +28,35 @@ export default class Home extends Component {
 
     componentDidMount() {
         const { page } = this.state;
-        request(`${PRODUCT_URL}?_page=${page}&_limit=${PRODUCT_LIMIT}`, {
-            method: 'GET',
-        }).then(products => {
+        const { getProducts } = this.props;
+
+        getProducts(page).then(products => {
             this.setState({
                 isLoading: false,
                 products
-            })
+            });
         }).catch(() => {
+            // TODO: change this to Toast Error and implement error state
             this.setState({
                 isLoading: false,
                 isLoadingError: true
-            })
+            });
         });
     }
 
-    addToCart = () => {
-        //TODO: add products to cart
-    }
+    static propTypes = {
+        getProducts: PropTypes.func.isRequired,
+        products: PropTypes.array.isRequired
+    };
 
     renderProducts = products => (
         <Container data-testid="products">
             {products && products.map(product => {
                 const { size, price, id, face } = product;
-                return <Product size={size} price={price} onClick={this.addToCart} id={id} face={face} key={id} />
+                return <Product size={size} price={price} id={id} face={face} key={id} />
             })}
         </Container>
-    )
+    );
 
     render() {
         const { isLoading, products } = this.state;
@@ -67,3 +70,16 @@ export default class Home extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    products: state.product.products
+});
+
+const mapDispatchToProps = {
+  getProducts
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Home);

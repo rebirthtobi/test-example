@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from "react-redux";
+import PropTypes from 'prop-types';
 
 const Wrapper = styled.div`
     background-color: ${props => props.theme.primaryColor};
@@ -39,15 +41,28 @@ const MenuItem = styled.li`
     }
 `;
 
+const Badge = styled.span`
+    padding: 4px;
+    background-color: ${props => props.theme.orangeColor};
+    color: #fff;
+    border-radius: 9px;
+`;
+
 class Header extends Component {
+    static propTypes = {
+        totalProductInCart: PropTypes.number.isRequired
+    };
+
     render() {
+        const { totalProductInCart } = this.props;
+
+        // TODO: implement currently selected state for menu
         return (
             <Wrapper>
                 <BrandName>Smiley Store</BrandName>
                 <Menu>
-                    <MenuItem>Home</MenuItem>
                     <MenuItem>Products</MenuItem>
-                    <MenuItem>Cart</MenuItem>
+                    <MenuItem>Cart <Badge data-testid={'totalProductInCart'}>{totalProductInCart}</Badge></MenuItem>
                     <MenuItem>Login</MenuItem>
               </Menu>
           </Wrapper>
@@ -55,4 +70,11 @@ class Header extends Component {
     }
 }
 
-export default Header;
+const mapStateToProps = state => ({
+   totalProductInCart: state.cart.products.length
+});
+
+export default connect(
+    mapStateToProps,
+    null
+)(Header);
