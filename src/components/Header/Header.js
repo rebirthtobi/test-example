@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
@@ -26,7 +27,7 @@ const Menu = styled.ul`
     justify-content: flex-end;
 `;
 
-const MenuItem = styled.li`
+const MenuItem = styled(NavLink)`
     color: ${props => props.theme.textColor};
     height: 100%;
     text-align: center;
@@ -35,6 +36,7 @@ const MenuItem = styled.li`
     font-weight: bold;
     line-height: 60px;
     cursor: pointer;
+    text-decoration: none;
     
     :hover {
         background-color: ${props => props.theme.secondaryColor};
@@ -61,10 +63,10 @@ class Header extends Component {
             <Wrapper>
                 <BrandName>Smiley Store</BrandName>
                 <Menu>
-                    <MenuItem>Products</MenuItem>
-                    <MenuItem>Cart <Badge data-testid={'totalProductInCart'}>{totalProductInCart}</Badge></MenuItem>
-                    <MenuItem>Login</MenuItem>
-              </Menu>
+                    <MenuItem to={'/products'}>Products</MenuItem>
+                    <MenuItem to={'/cart'}>Cart <Badge data-testid={'totalProductInCart'}>{totalProductInCart}</Badge></MenuItem>
+                    <MenuItem to={'/login'}>Login</MenuItem>
+                </Menu>
           </Wrapper>
         );
     }
@@ -77,4 +79,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     null
-)(Header);
+)(withRouter(Header));

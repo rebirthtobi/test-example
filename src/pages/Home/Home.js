@@ -2,10 +2,9 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
 import Product from '../../components/Product/Product';
 import { getProducts } from "../../reducers/productReducer";
+import { EmptyState, ErrorState } from "../../components/State/State";
 
 const Container = styled.div`
     width: 80%
@@ -49,23 +48,28 @@ class Home extends Component {
         products: PropTypes.array.isRequired
     };
 
-    renderProducts = products => (
-        <Container data-testid="products">
-            {products && products.map(product => {
-                const { size, price, id, face } = product;
-                return <Product size={size} price={price} id={id} face={face} key={id} />
-            })}
-        </Container>
-    );
-
     render() {
-        const { isLoading, products } = this.state;
+        const { isLoading, isLoadingError, products } = this.state;
+
+        if (isLoading) {
+            return <div data-testid={'loader'}>Loading...</div>;
+        }
+
+        if (isLoadingError) {
+            return <ErrorState errorText={'There was an error getting products'} />
+        }
 
         return (
             <Fragment>
-                <Header />
-                {isLoading ? <div data-testid={'loader'}>Loading...</div> : this.renderProducts(products)}
-                <Footer />
+                {!products.length
+                    ? <EmptyState emptyText={'There are no products to sell'}/>
+                    : <Container data-testid="products">
+                        {products && products.map(product => {
+                            const {size, price, id, face} = product;
+                            return <Product size={size} price={price} id={id} face={face} key={id}/>
+                        })}
+                    </Container>
+                }
             </Fragment>
         )
     }

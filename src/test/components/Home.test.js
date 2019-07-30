@@ -3,16 +3,13 @@ import { cleanup, waitForDomChange } from "@testing-library/react";
 import 'jest-dom/extend-expect';
 import fetchMock from 'fetch-mock';
 import Home from "../../pages/Home/Home";
-import { renderWithRedux } from "../__MOCKS__/redux";
-import { initialState } from "../../reducers/productReducer";
+import { renderWithReduxAndRouter } from "../__MOCKS__/redux";
 
 afterEach(cleanup);
 
 describe('Testing the homepage', () => {
     it('renders without crashing', () => {
-        const { asFragment, getByTestId } = renderWithRedux(<Home />, {
-            initialState
-        });
+        const { asFragment, getByTestId } = renderWithReduxAndRouter(<Home />);
 
         expect(asFragment()).toMatchSnapshot();
         expect(getByTestId('loader')).toHaveTextContent('Loading...');
@@ -39,9 +36,7 @@ describe('Testing the homepage', () => {
                 },
             ],
         });
-        const { asFragment, getByTestId, debug } = renderWithRedux(<Home />, {
-            initialState
-        });;
+        const { asFragment, getByTestId, debug } = renderWithReduxAndRouter(<Home />);
 
         expect(asFragment()).toMatchSnapshot();
         expect(getByTestId('loader')).toHaveTextContent('Loading...');

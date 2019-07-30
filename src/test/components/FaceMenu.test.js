@@ -2,14 +2,14 @@ import React from 'react';
 import { cleanup, fireEvent } from '@testing-library/react';
 import 'jest-dom/extend-expect';
 import FaceMenu from '../../components/Product/components/FaceMenu/FaceMenu';
-import { renderWithRedux } from '../__MOCKS__/redux';
+import { renderWithReduxAndRouter } from '../__MOCKS__/redux';
 import Header from "../../components/Header/Header";
 
 afterEach(cleanup);
 
 describe('FaceMenu works as expected', () => {
     it('renders without any error', () => {
-        const { asFragment, queryByText } = renderWithRedux(<FaceMenu faceId={'45'} />);
+        const { asFragment, queryByText } = renderWithReduxAndRouter(<FaceMenu faceId={'45'} />);
 
         expect(asFragment()).toMatchSnapshot();
         expect(queryByText('Add to Cart')).toBeFalsy();
@@ -18,7 +18,7 @@ describe('FaceMenu works as expected', () => {
     });
 
     it('show context menu clicks', () => {
-        const { asFragment, getByTestId, queryByText } = renderWithRedux(<FaceMenu faceId={'45'} />);
+        const { asFragment, getByTestId, queryByText } = renderWithReduxAndRouter(<FaceMenu faceId={'45'} />);
 
 
         expect(asFragment()).toMatchSnapshot();
@@ -37,9 +37,9 @@ describe('FaceMenu works as expected', () => {
     });
 
     it('Should add item to cart correctly', () => {
-        const { getByTestId } = renderWithRedux(<FaceMenu faceId={'45'} />);
-        const { container, store } = renderWithRedux(<Header />);
-        const menuTags = container.querySelectorAll('li');
+        const { getByTestId } = renderWithReduxAndRouter(<FaceMenu faceId={'45'} />);
+        const { container, store } = renderWithReduxAndRouter(<Header />);
+        const menuTags = container.querySelectorAll('a');
         const menusNames = ['Home', 'Products', 'Cart 0', 'Login'];
         const menusNamesWithCartItem = ['Home', 'Products', 'Cart 1', 'Login'];
 
